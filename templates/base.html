@@ -11,12 +11,15 @@
 
 <body>
   <div class="container">
-  {% for msg in get_flashed_messages() %}
-  <p style="color: green">{{ msg }}</p>
-  {% endfor %}
-  {% block content %}
-  {% endblock %}
-</div>
+    {% for msg in get_flashed_messages() %}
+    <p style="color: green">{{ msg }}</p>
+    {% endfor %}
+    {% block content %}
+    {% endblock %}
+
+  </div>
+
+
 </body>
 
 </html>
