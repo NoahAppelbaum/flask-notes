@@ -11,7 +11,7 @@ class AddNewUserForm(FlaskForm):
                            validators=[InputRequired(), Length(max=20)])
     password = PasswordField("Password",
                            validators=[InputRequired(), Length(max=30)])
-    email = EmailField("email",
+    email = EmailField("Email",
                        validators=[InputRequired(), Length(max=50)])
     first_name = StringField("First Name",
                              validators=[InputRequired(), Length(max=30)])
