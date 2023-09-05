@@ -3,9 +3,9 @@
 import os
 from flask import Flask, render_template, flash, redirect, jsonify, request, session
 # from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db, db, User
+from models import connect_db, db, User, Note
 # from sqlalchemy.exc import  DataError
-from forms import AddNewUserForm, LoginForm, CSRFProtectForm
+from forms import AddNewUserForm, LoginForm, CSRFProtectForm, AddNewNoteForm
 
 
 app = Flask(__name__)
@@ -131,3 +131,52 @@ def show_user_info(username):
     else:
         flash("You must be logged in to see user page")
         return redirect("/login")
+
+@app.post('/users/<username>/delete')
+def delete_user(username):
+    """Deletes user and all notes"""
+
+    user = User.query.get_or_404(username)
+
+    if session["username"] == user.username:
+        Note.query.filter_by(owner_username=user.username).delete()
+
+        db.session.delete(user)
+
+        db.session.commit()
+
+        session.pop("username", None)
+        flash(f"Account deleted successfully")
+        return redirect("/")
+
+    else:
+        return render_template("unauthorized_user.html")
+
+@app.route('/users/<username>/notes/add', methods=["GET", "POST"])
+def handle_add_note_form(username):
+    """Display form to add new note and handle add note submit"""
+
+    user = User.query.get_or_404(username)
+
+    if session["username"] == user.username:
+
+        form = AddNewNoteForm()
+
+        if form.validate_on_submit():
+            new_note = Note(
+                title=form.title.data,
+                content=form.content.data,
+                owner_username=user.username
+            )
+
+            db.session.add(new_note)
+            db.session.commit()
+
+            flash(f"Added {new_note.title} successfully!")
+            return redirect(f'/users/{username}')
+
+        else:
+            return render_template('add_note_form.html', form=form, user=user)
+
+    else:
+        return render_template("unauthorized_user.html")
