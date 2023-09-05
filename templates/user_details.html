@@ -15,10 +15,30 @@
 
 
 
-<form action="/logout" method="POST">
+<form>
   {{form.hidden_tag()}}
-  <button type="submit" class="btn btn-primary">Logout</button>
+  <button formaction="/logout" formmethod="POST"
+  type="submit" class="btn btn-primary">Logout</button>
+  <button formaction="/users/{{ user.username }}/delete" formmethod="POST"
+  type="submit" class="btn btn-danger">Delete Account</button>
 </form>
+
+<a href="/users/{{ user.username }}/notes/add">Add a New Note</a>
+
+<ul class="note-list">
+  {% for note in user.notes %}
+    <li> <b>{{ note.title }}</b>
+      <form>
+        {{ form.hidden_tag() }}
+        <button class="btn btn-primary" formaction="/notes/{{ note.id }}/update"
+         formmethod="GET">Edit</button>
+        <button class="btn btn-danger" formaction="/notes/{{ note.id }}/delete"
+         formmethod="POST">Delete</button>
+      </form>
+      </li>
+  {% endfor %}
+</ul>
+
 
 
 {% endblock %}
