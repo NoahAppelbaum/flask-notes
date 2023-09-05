@@ -24,7 +24,7 @@ def redirect_to_register():
 
     return redirect('/register')
 
-@app.route('/register', method=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def handle_registration():
     """Show and handle registration form."""
 
