@@ -4,6 +4,7 @@ from flask import Flask, render_template, flash, redirect, jsonify, request
 from models import connect_db, db, DEFAULT_IMAGE_URL
 # from sqlalchemy.exc import  DataError
 from forms import
+from
 
 """Flask app for Cupcakes"""
 app = Flask(__name__)
