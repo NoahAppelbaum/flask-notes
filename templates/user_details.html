@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ user.username }}{% endblock %}
+
+{% block content %}
+
+
+
+<div class="mt-3">
+  <p><b>Username:</b> {{ user.username }}</p>
+  <p><b>Email:</b> {{ user.email }}</p>
+  <p><b>First Name:</b> {{ user.first_name }}</p>
+  <p><b>Last Name:</b> {{ user.last_name }}</p>
+</div>
+
+{% endblock %}
