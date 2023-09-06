@@ -129,8 +129,7 @@ def show_user_info(username):
         return render_template("user_details.html", user=user, form=form)
 
     else:
-        flash("You must be logged in to see user page")
-        return redirect("/login")
+        return render_template("unauthorized_user.html")
 
 @app.post('/users/<username>/delete')
 def delete_user(username):
@@ -184,6 +183,7 @@ def handle_add_note_form(username):
 
 
 #Note Routes
+
 @app.route('/notes/<int:note_id>/update', methods=["GET", "POST"])
 def handle_edit_note_form(note_id):
     """Display and handle note edit form"""
