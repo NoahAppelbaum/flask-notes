@@ -152,6 +152,7 @@ def delete_user(username):
     else:
         return render_template("unauthorized_user.html")
 
+
 @app.route('/users/<username>/notes/add', methods=["GET", "POST"])
 def handle_add_note_form(username):
     """Display form to add new note and handle add note submit"""
@@ -177,6 +178,51 @@ def handle_add_note_form(username):
 
         else:
             return render_template('add_note_form.html', form=form, user=user)
+
+    else:
+        return render_template("unauthorized_user.html")
+
+
+#Note Routes
+@app.route('/notes/<int:note_id>/update', methods=["GET", "POST"])
+def handle_edit_note_form(note_id):
+    """Display and handle note edit form"""
+
+    note = Note.query.get_or_404(note_id)
+
+    if session["username"] == note.user.username:
+
+        form = AddNewNoteForm(obj=note)
+
+        if form.validate_on_submit():
+            note.title = form.title.data
+            note.content = form.content.data
+
+            db.session.commit()
+
+            flash(f"{note.title} updated successfully!")
+            return redirect(f'/users/{note.user.username}')
+
+        else:
+            return render_template('update_note_form.html', form=form, note=note)
+
+    else:
+        return render_template("unauthorized_user.html")
+
+
+@app.post('/notes/<int:note_id>/delete')
+def delete_note(note_id):
+    """Deletes notes"""
+
+    note = Note.query.get_or_404(note_id)
+    title = note.title
+
+    if session["username"] == note.user.username:
+        db.session.delete(note)
+
+        db.session.commit()
+        flash(f"Deleted {title}")
+        return redirect(f'/users/{note.user.username}')
 
     else:
         return render_template("unauthorized_user.html")
